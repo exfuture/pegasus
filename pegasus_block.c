@@ -19,6 +19,7 @@
  * pegasus — digital channel simulator, block file
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -143,5 +144,26 @@ void pgb_copy(pgs_block_t* _destination,
 
 	for (unsigned long long i = _destination_index; i < _destination_index + _amount; i++)
 		_destination->chunk[i].bit = _source->chunk[_source_index + i - _destination_index].bit;
+}
+
+void pgb_show_blocks(pgs_block_t* _block, unsigned long long _count)
+{
+	if (unlikely(_block == NULL))
+		pgp_null();
+
+	for (unsigned long long i = 0; i < _count; i++)
+	{
+		for (unsigned long long j = 0; j < _block[i].chunk_size; j++)
+			printf("%u", _block[i].chunk[j].bit);
+		if (_count > 1 && i < _count - 1)
+			printf(" ");
+		else
+			printf("\n");
+	}
+}
+
+void pgb_show_block(pgs_block_t* _block)
+{
+	pgb_show_blocks(_block, 1);
 }
 

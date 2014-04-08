@@ -24,7 +24,8 @@
  * pegasus — digital channel simulator, selftests file header
  */
 
-#define PGST_RNG_ITERATIONS 1000000
+#define PGST_RNG_ITERATIONS	1000000
+#define PGST_SOURCE_LENGTH	30
 
 void pgst_run_tests();
 

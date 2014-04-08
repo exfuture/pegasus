@@ -42,6 +42,8 @@ void pgb_copy(pgs_block_t* _destination,
 		pgs_block_t* _source,
 		unsigned long long _source_index,
 		unsigned long long _amount);
+void pgb_show_blocks(pgs_block_t* _block, unsigned long long _count);
+void pgb_show_block(pgs_block_t* _block);
 
 #endif /* PEGASUS_BLOCK_H */
 
