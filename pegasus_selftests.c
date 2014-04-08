@@ -34,10 +34,11 @@
 #include "pegasus_selftests.h"
 
 static void pgst_show_result_lf(const char* _test_name,
+		const char* _subtest_name,
 		double _real_value,
 		double _desired_value)
 {
-	printf("\t[%s] got: %lf, should be: %lf\n", _test_name, _real_value, _desired_value);
+	printf("\t[%s, %s] got: %lf, should be: %lf\n", _test_name, _subtest_name, _real_value, _desired_value);
 }
 
 static double pgst_fec_test(unsigned int _fec)
@@ -114,16 +115,16 @@ void pgst_run_tests()
 	sum = 0;
 	for (unsigned long long i = 0; i < PGST_RNG_ITERATIONS; i++)
 		sum += pgr_get_lf() / (double)PGST_RNG_ITERATIONS;
-	pgst_show_result_lf("Uniform average", sum, 0.5);
+	pgst_show_result_lf("RNG", "uniform distribution average", sum, 0.5);
 	sum = 0;
 	for (unsigned long long i = 0; i < PGST_RNG_ITERATIONS; i++)
 		sum += pgr_get_gauss() / (double)PGST_RNG_ITERATIONS;
-	pgst_show_result_lf("Gaussian average", sum, 0.0);
+	pgst_show_result_lf("RNG", "Gaussian distribution average", sum, 0.0);
 
 	printf("Performing codecs test…\n");
-	pgst_show_result_lf(pgf_to_string(PGF_HAMMING74), pgst_fec_test(PGF_HAMMING74), 0.0);
-	pgst_show_result_lf(pgf_to_string(PGF_CYCLIC85), pgst_fec_test(PGF_CYCLIC85), 0.0);
-	pgst_show_result_lf(pgf_to_string(PGF_BCH1557), pgst_fec_test(PGF_BCH1557), 0.0);
-	pgst_show_result_lf(pgf_to_string(PGF_BCH1575), pgst_fec_test(PGF_BCH1575), 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_HAMMING74), pgst_fec_test(PGF_HAMMING74), 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_CYCLIC85), pgst_fec_test(PGF_CYCLIC85), 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_BCH1557), pgst_fec_test(PGF_BCH1557), 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_BCH1575), pgst_fec_test(PGF_BCH1575), 0.0);
 }
 
