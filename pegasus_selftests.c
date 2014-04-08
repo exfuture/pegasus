@@ -122,6 +122,7 @@ void pgst_run_tests()
 	pgst_show_result_lf("RNG", "Gaussian distribution average", sum, 0.0);
 
 	printf("Performing codecs test…\n");
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_NONE), pgst_fec_test(PGF_NONE), 0.0);
 	pgst_show_result_lf("FEC", pgf_to_string(PGF_HAMMING74), pgst_fec_test(PGF_HAMMING74), 0.0);
 	pgst_show_result_lf("FEC", pgf_to_string(PGF_CYCLIC85), pgst_fec_test(PGF_CYCLIC85), 0.0);
 	pgst_show_result_lf("FEC", pgf_to_string(PGF_BCH1557), pgst_fec_test(PGF_BCH1557), 0.0);
