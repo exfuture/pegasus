@@ -130,6 +130,17 @@ void pgb_xor(pgs_block_t* _target, pgs_block_t* _pattern)
 		_target->chunk[i].bit ^= _pattern->chunk[i].bit;
 }
 
+unsigned int pgb_multixor(pgs_block_t* _block, unsigned long long* _bits, unsigned long long _length)
+{
+	if (unlikely(_block == NULL))
+		pgp_null();
+
+	unsigned long long ret = 0;
+	for (unsigned long long i = 0; i < _length; i++)
+		ret ^= _block->chunk[_bits[i]].bit;
+	return ret;
+}
+
 void pgb_copy(pgs_block_t* _destination,
 		unsigned long long _destination_index,
 		pgs_block_t* _source,

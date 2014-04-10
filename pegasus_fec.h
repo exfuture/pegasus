@@ -74,6 +74,13 @@
 #define PGF_BCH1557_VOLUME	(1ULL << PGF_BCH1557_FEC_SUFFIX)
 #define PGF_BCH1575_VOLUME	(1ULL << PGF_BCH1575_FEC_SUFFIX)
 
+#define PGF_HAMMING74_FEC_BIT_4		{1, 2, 3}
+#define PGF_HAMMING74_FEC_BIT_5		{0, 2, 3}
+#define PGF_HAMMING74_FEC_BIT_6		{0, 1, 3}
+#define PGF_HAMMING74_SYNDROME_BIT_0	{3, 4, 5, 6}
+#define PGF_HAMMING74_SYNDROME_BIT_1	{1, 2, 5, 6}
+#define PGF_HAMMING74_SYNDROME_BIT_2	{0, 2, 4, 6}
+
 pgs_block_t* pgf_syndromes_cyclic85;
 pgs_block_t* pgf_syndromes_bch1557;
 pgs_block_t* pgf_syndromes_bch1575;

@@ -37,6 +37,7 @@ void pgb_binary_string_to_block(pgs_block_t* _block,
 		const char* _binary_string);
 void pgb_divmod2(pgs_block_t** _quotient, pgs_block_t* _dividend, pgs_block_t* _divisor);
 void pgb_xor(pgs_block_t* _target, pgs_block_t* _pattern);
+unsigned int pgb_multixor(pgs_block_t* _block, unsigned long long* _bits, unsigned long long _length);
 void pgb_copy(pgs_block_t* _destination,
 		unsigned long long _destination_index,
 		pgs_block_t* _source,
