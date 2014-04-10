@@ -211,6 +211,8 @@ int main(int argc, char** argv)
 	if (pgs_selftest == 1)
 	{
 		pgst_run_tests();
+		pgf_done_syndromes();
+		pgf_done_polynomes();
 		exit(EX_OK);
 	}
 
