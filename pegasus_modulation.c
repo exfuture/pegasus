@@ -206,7 +206,7 @@ void pgm_init_tables()
 	}
 }
 
-char* pgs_modulation_to_string(unsigned int _modulation)
+char* pgm_to_string(unsigned int _modulation)
 {
 	switch (_modulation)
 	{

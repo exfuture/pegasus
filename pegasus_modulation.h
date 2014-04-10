@@ -157,7 +157,7 @@ pgs_signal_t pgm_256qam_table[PGM_256QAM_VOLUME];
 pgs_signal_t pgm_1024qam_table[PGM_1024QAM_VOLUME];
 
 void pgm_init_tables();
-char* pgs_modulation_to_string(unsigned int _modulation);
+char* pgm_to_string(unsigned int _modulation);
 unsigned long long pgm_get_block_size(unsigned int _modulation);
 unsigned long long pgm_get_volume(unsigned int _modulation);
 unsigned long long pgm_modulate(pgs_signal_t** _modulated_signals,

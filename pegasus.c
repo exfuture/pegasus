@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 	{
 		printf("Source: %s\n", pgs_source_to_string(pgs_source));
 		printf("FEC: %s\n", pgf_to_string(pgs_fec));
-		printf("Modulation: %s\n", pgs_modulation_to_string(pgs_modulation));
+		printf("Modulation: %s\n", pgm_to_string(pgs_modulation));
 		printf("Channel: %s\n", pgc_channel_to_string(pgs_channel));
 		printf("Error type: %s\n", pge_error_to_string(pgs_error));
 		printf("h²=[%lf, %lf] %s, with %lf step\n",
