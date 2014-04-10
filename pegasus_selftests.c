@@ -19,9 +19,11 @@
  * pegasus — digital channel simulator, selftests file
  */
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "pegasus_common_strings.h"
 #include "pegasus_common_types.h"
 
 #include "pegasus_block.h"
@@ -34,17 +36,57 @@
 
 #include "pegasus_selftests.h"
 
+static unsigned long long
+	all_tests_count = 0,
+	passed_tests_count = 0,
+	failed_tests_count = 0;
+
 static void pgst_show_result_lf(const char* _test_name,
 		const char* _subtest_name,
 		const char* _result_name,
 		double _real_value,
-		double _desired_value)
+		double _desired_value,
+		double _allowed_deviation)
 {
-	printf("\t[%s, %s, %s] got: %lf, should be: %lf\n", _test_name, _subtest_name, _result_name, _real_value, _desired_value);
+	double deviation = fabs(_real_value - _desired_value);
+	unsigned short int passed = deviation <= _allowed_deviation ? 1 : 0;
+	if (passed)
+		passed_tests_count++;
+	else
+		failed_tests_count++;
+	char* pass_mark = passed ? PGS_FG_COLOR_GREEN"✓" : PGS_FG_COLOR_RED"✗";
+	printf("\t[%s"PGS_FG_COLOR_RESET" %s, %s, %s] got: %lf, should be: %lf\n", pass_mark, _test_name, _subtest_name, _result_name, _real_value, _desired_value);
+}
+
+static double pgst_rng_test(unsigned int _distribution)
+{
+	PGST_START_TEST();
+
+	double sum = 0;
+	for (unsigned long long i = 0; i < PGST_RNG_ITERATIONS; i++)
+	{
+		double summand = 0;
+		switch (_distribution)
+		{
+			case PGR_UNIFORM:
+				summand = pgr_get_lf();
+				break;
+			case PGR_GAUSSIAN:
+				summand = pgr_get_gauss();
+				break;
+			default:
+				pgp_switch_default();
+				break;
+		}
+		sum += summand / (double)PGST_RNG_ITERATIONS;
+	}
+	return sum;
 }
 
 static double pgst_fec_test(unsigned int _fec)
 {
+	PGST_START_TEST();
+
 	pgs_block_t* source_bits;
 	pgs_block_t* source_blocks;
 	pgs_block_t* encoded_blocks;
@@ -112,6 +154,8 @@ static double pgst_fec_test(unsigned int _fec)
 
 static double pgst_modulator_test(unsigned int _modulation)
 {
+	PGST_START_TEST();
+
 	pgs_block_t* source_bits;
 	pgs_block_t* source_blocks;
 	pgs_signal_t* modulated_signals;
@@ -178,38 +222,33 @@ static double pgst_modulator_test(unsigned int _modulation)
 void pgst_run_tests()
 {
 	printf("Performing RNG normalization test…\n");
-	double sum;
-	sum = 0;
-	for (unsigned long long i = 0; i < PGST_RNG_ITERATIONS; i++)
-		sum += pgr_get_lf() / (double)PGST_RNG_ITERATIONS;
-	pgst_show_result_lf("RNG", "uniform distribution", "average", sum, 0.5);
-	sum = 0;
-	for (unsigned long long i = 0; i < PGST_RNG_ITERATIONS; i++)
-		sum += pgr_get_gauss() / (double)PGST_RNG_ITERATIONS;
-	pgst_show_result_lf("RNG", "Gaussian distribution", "average", sum, 0.0);
+	pgst_show_result_lf("RNG", "uniform distribution", "average", pgst_rng_test(PGR_UNIFORM), 0.5, 0.05);
+	pgst_show_result_lf("RNG", "Gaussian distribution", "average", pgst_rng_test(PGR_GAUSSIAN), 0.0, 0.05);
 
 	printf("Performing codecs test…\n");
-	pgst_show_result_lf("FEC", pgf_to_string(PGF_NONE), "BER", pgst_fec_test(PGF_NONE), 0.0);
-	pgst_show_result_lf("FEC", pgf_to_string(PGF_HAMMING74), "BER", pgst_fec_test(PGF_HAMMING74), 0.0);
-	pgst_show_result_lf("FEC", pgf_to_string(PGF_CYCLIC85), "BER", pgst_fec_test(PGF_CYCLIC85), 0.0);
-	pgst_show_result_lf("FEC", pgf_to_string(PGF_BCH1557), "BER", pgst_fec_test(PGF_BCH1557), 0.0);
-	pgst_show_result_lf("FEC", pgf_to_string(PGF_BCH1575), "BER", pgst_fec_test(PGF_BCH1575), 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_NONE), "BER", pgst_fec_test(PGF_NONE), 0.0, 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_HAMMING74), "BER", pgst_fec_test(PGF_HAMMING74), 0.0, 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_CYCLIC85), "BER", pgst_fec_test(PGF_CYCLIC85), 0.0, 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_BCH1557), "BER", pgst_fec_test(PGF_BCH1557), 0.0, 0.0);
+	pgst_show_result_lf("FEC", pgf_to_string(PGF_BCH1575), "BER", pgst_fec_test(PGF_BCH1575), 0.0, 0.0);
 
 	printf("Performing modulators test…\n");
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_ASK), "BER", pgst_modulator_test(PGM_ASK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_FSK), "BER", pgst_modulator_test(PGM_FSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_BPSK), "BER", pgst_modulator_test(PGM_BPSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_QPSK), "BER", pgst_modulator_test(PGM_QPSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_8PSK), "BER", pgst_modulator_test(PGM_8PSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_16PSK), "BER", pgst_modulator_test(PGM_16PSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_32PSK), "BER", pgst_modulator_test(PGM_32PSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_64PSK), "BER", pgst_modulator_test(PGM_64PSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_256PSK), "BER", pgst_modulator_test(PGM_256PSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_1024PSK), "BER", pgst_modulator_test(PGM_1024PSK), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_16QAM), "BER", pgst_modulator_test(PGM_16QAM), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_32QAM), "BER", pgst_modulator_test(PGM_32QAM), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_64QAM), "BER", pgst_modulator_test(PGM_64QAM), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_256QAM), "BER", pgst_modulator_test(PGM_256QAM), 0.0);
-	pgst_show_result_lf("Modulator", pgm_to_string(PGM_1024QAM), "BER", pgst_modulator_test(PGM_1024QAM), 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_ASK), "BER", pgst_modulator_test(PGM_ASK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_FSK), "BER", pgst_modulator_test(PGM_FSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_BPSK), "BER", pgst_modulator_test(PGM_BPSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_QPSK), "BER", pgst_modulator_test(PGM_QPSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_8PSK), "BER", pgst_modulator_test(PGM_8PSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_16PSK), "BER", pgst_modulator_test(PGM_16PSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_32PSK), "BER", pgst_modulator_test(PGM_32PSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_64PSK), "BER", pgst_modulator_test(PGM_64PSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_256PSK), "BER", pgst_modulator_test(PGM_256PSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_1024PSK), "BER", pgst_modulator_test(PGM_1024PSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_16QAM), "BER", pgst_modulator_test(PGM_16QAM), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_32QAM), "BER", pgst_modulator_test(PGM_32QAM), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_64QAM), "BER", pgst_modulator_test(PGM_64QAM), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_256QAM), "BER", pgst_modulator_test(PGM_256QAM), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_1024QAM), "BER", pgst_modulator_test(PGM_1024QAM), 0.0, 0.0);
+
+	printf("Tests: %llu, passed: %llu, failed: %llu\n", all_tests_count, passed_tests_count, failed_tests_count);
 }
 

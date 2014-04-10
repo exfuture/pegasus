@@ -47,6 +47,9 @@
 	__pgr_get_gauss(0)
 #endif
 
+#define PGR_UNIFORM	1
+#define PGR_GAUSSIAN	2
+
 uint64_t* pgr_seed;
 
 void pgr_init_seed();

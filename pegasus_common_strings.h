@@ -24,7 +24,10 @@
  * pegasus — digital channel simulator, common strings file header
  */
 
-#define PGS_CS_UNKNOWN	"Unknown"
+#define PGS_CS_UNKNOWN		"Unknown"
+#define PGS_FG_COLOR_RED	"\033[031m"
+#define PGS_FG_COLOR_GREEN	"\033[032m"
+#define PGS_FG_COLOR_RESET	"\033[0m"
 
 #endif /* PEGASUS_COMMON_STRINGS_H */
 
