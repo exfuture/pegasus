@@ -25,7 +25,7 @@
 
 #include "pegasus_error.h"
 
-char* pge_error_to_string(unsigned int _error)
+char* pge_to_string(unsigned int _error)
 {
 	switch (_error)
 	{

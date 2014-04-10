@@ -30,7 +30,7 @@
 #define PGE_BER_STRING	"Bit error rate"
 #define PGE_SER_STRING	"Symbol error rate"
 
-char* pge_error_to_string(unsigned int _error);
+char* pge_to_string(unsigned int _error);
 
 #endif /* PEGASUS_ERROR_H */
 
