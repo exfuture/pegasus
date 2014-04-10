@@ -118,7 +118,6 @@ static void pgf_examine_error_vectors(pgs_block_t** _syndromes_table,
 			pgb_destroy_block(test_syndrome);
 
 			pgb_xor(test_message, test_error);
-
 		}
 	pgb_destroy_block(test_error);
 	pgb_destroy_block(test_message);
@@ -168,9 +167,29 @@ void pgf_init_syndromes()
 
 void pgf_done_syndromes()
 {
-	pgb_destroy_blocks(pgf_syndromes_cyclic85, PGF_CYCLIC85_VOLUME);
-	pgb_destroy_blocks(pgf_syndromes_bch1557, PGF_BCH1557_VOLUME);
-	pgb_destroy_blocks(pgf_syndromes_bch1575, PGF_BCH1575_VOLUME);
+#if defined (_OPENMP)
+#pragma omp parallel sections
+#endif
+	{
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgf_syndromes_cyclic85, PGF_CYCLIC85_VOLUME);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgf_syndromes_bch1557, PGF_BCH1557_VOLUME);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgf_syndromes_bch1575, PGF_BCH1575_VOLUME);
+		}
+	}
 }
 
 char* pgf_to_string(unsigned int _fec)
