@@ -16,7 +16,7 @@
  *
  * @section DESCRIPTION
  *
- * pegasus — digital channel simulator, panic file header
+ * pegasus — digital channel simulator, panic file
  */
 
 #include <execinfo.h>
@@ -38,7 +38,7 @@ static void pgp_show_stacktrace()
 	for (size_t i = 0; i < buffer_size; i++)
 		printf("%s\n", symbols[i]);
 
-	free (symbols);
+	free(symbols);
 }
 
 void pgp_usage(char _key, char* _keyvalue)
