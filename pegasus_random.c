@@ -56,7 +56,7 @@ uint64_t __pgr_get_u64(unsigned long long _thread)
 
 double __pgr_get_lf(unsigned long long _thread)
 {
-	return fabs((double)__pgr_get_u64(_thread) / PGS_UINT64_MAX);
+	return fabs((double)__pgr_get_u64(_thread) / (double)PGS_UINT64_MAX);
 }
 
 double __pgr_get_gauss(unsigned long long _thread)

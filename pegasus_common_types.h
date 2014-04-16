@@ -25,7 +25,6 @@
  */
 
 #include <limits.h>
-#include <math.h>
 #include <stdint.h>
 
 #ifdef __GNUC__
@@ -37,7 +36,7 @@
 #endif /* __GNUC__ */
 
 #define PGS_UINT64_SIZE	(sizeof(uint64_t) * CHAR_BIT)
-#define PGS_UINT64_MAX 	(pow(2.0, PGS_UINT64_SIZE) - 1)
+#define PGS_UINT64_MAX 	((1ULL << (PGS_UINT64_SIZE - 1)) ^ ((1ULL << (PGS_UINT64_SIZE - 1)) - 1))
 
 typedef struct pgs_bit
 {
