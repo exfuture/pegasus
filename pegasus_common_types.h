@@ -48,6 +48,7 @@ typedef struct pgs_block
 {
 	pgs_bit_t* chunk;
 	unsigned long long chunk_size;
+	unsigned int used:1;
 } pgs_block_t;
 
 typedef struct pgs_signal

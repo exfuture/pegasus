@@ -114,7 +114,9 @@ static void pgf_examine_error_vectors(pgs_block_t** _syndromes_table,
 			pgb_xor(test_message, test_error);
 
 			pgb_divmod2(&test_syndrome, test_message, _fec_polynome);
-			pgb_copy(&(*_syndromes_table)[pgb_block_to_ull(test_syndrome)], 0, test_error, 0, _block_size);
+			unsigned long long index = pgb_block_to_ull(test_syndrome);
+			(*_syndromes_table)[index].used = 1;
+			pgb_copy(&(*_syndromes_table)[index], 0, test_error, 0, _block_size);
 			pgb_destroy_block(test_syndrome);
 
 			pgb_xor(test_message, test_error);
@@ -388,7 +390,8 @@ static void pgf_decode_block_crc(pgs_block_t* _decoded_block,
 	pgb_divmod2(&syndrome, _encoded_block, _polynome);
 	unsigned long long syndrome_ull = pgb_block_to_ull(syndrome);
 	if (likely(syndrome_ull > 0))
-		pgb_xor(_decoded_block, &_syndromes_table[syndrome_ull]);
+		if (unlikely(_syndromes_table[syndrome_ull].used))
+			pgb_xor(_decoded_block, &_syndromes_table[syndrome_ull]);
 	pgb_destroy_block(syndrome);
 }
 

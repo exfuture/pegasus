@@ -42,6 +42,7 @@ pgs_block_t* pgb_create_blocks(unsigned long long _count, unsigned long long _al
 		for (unsigned long long j = 0; j < _alignment; j++)
 			ret[i].chunk[j].bit = 0;
 		ret[i].chunk_size = _alignment;
+		ret[i].used = 0;
 	}
 	return ret;
 }
