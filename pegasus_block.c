@@ -166,7 +166,7 @@ void pgb_show_blocks(pgs_block_t* _block, unsigned long long _count)
 	{
 		for (unsigned long long j = 0; j < _block[i].chunk_size; j++)
 			printf("%u", _block[i].chunk[j].bit);
-		if (_count > 1 && i < _count - 1)
+		if (likely(_count > 1 && i < _count - 1))
 			printf(" ");
 		else
 			printf("\n");

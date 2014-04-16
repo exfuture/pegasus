@@ -108,7 +108,7 @@ static void pgf_examine_error_vectors(pgs_block_t** _syndromes_table,
 	pgs_block_t* test_syndrome;
 	pgb_binary_string_to_block(test_message, _test_sequence);
 	for (unsigned long long i = (1ULL << _block_size) - 1; i > 0; i--)
-		if (pgt_popcount(i) <= _errors_count)
+		if (unlikely(pgt_popcount(i) <= _errors_count))
 		{
 			pgb_ull_to_block(test_error, i);
 			pgb_xor(test_message, test_error);
@@ -372,7 +372,7 @@ static void pgf_decode_block_hamming74(pgs_block_t* _decoded_block,
 					PGF_HAMMING74_INPUT_BLOCK_SIZE);
 	wrong_bit = pgb_block_to_ull(syndrome_hamming74);
 	pgb_copy(_decoded_block, 0, _encoded_block, 0, PGF_HAMMING74_INPUT_BLOCK_SIZE);
-	if (wrong_bit > 0 && wrong_bit <= PGF_HAMMING74_INPUT_BLOCK_SIZE)
+	if (unlikely(wrong_bit > 0 && wrong_bit <= PGF_HAMMING74_INPUT_BLOCK_SIZE))
 		_decoded_block->chunk[wrong_bit - 1].bit = ~_decoded_block->chunk[wrong_bit - 1].bit;
 	pgb_destroy_block(syndrome_hamming74);
 }
@@ -387,7 +387,7 @@ static void pgf_decode_block_crc(pgs_block_t* _decoded_block,
 	pgb_copy(_decoded_block, 0, _encoded_block, 0, _input_block_size);
 	pgb_divmod2(&syndrome, _encoded_block, _polynome);
 	unsigned long long syndrome_ull = pgb_block_to_ull(syndrome);
-	if (syndrome_ull > 0)
+	if (likely(syndrome_ull > 0))
 		pgb_xor(_decoded_block, &_syndromes_table[syndrome_ull]);
 	pgb_destroy_block(syndrome);
 }
