@@ -39,15 +39,16 @@ static void pgm_fill_xsk(pgs_signal_t* _table,
 		unsigned int _self_multiply)
 {
 	unsigned long long index;
-	double multiplier;
+	double multiplier, argument;
 
 	for (unsigned long long i = 0; i < _volume; i++)
 	{
 		index = _gray_coded == 1 ? pgt_value_to_gray(i) : i;
 		multiplier = _self_multiply == 1 ? (double)i : 1.0;
+		argument = _phase_shift + (double)i * _angle_step * 2.0;
 
-		_table[index].i = multiplier * cos(_phase_shift + (double)i * _angle_step * 2.0);
-		_table[index].q = multiplier * sin(_phase_shift + (double)i * _angle_step * 2.0);
+		_table[index].i = multiplier * cos(argument);
+		_table[index].q = multiplier * sin(argument);
 	}
 }
 
