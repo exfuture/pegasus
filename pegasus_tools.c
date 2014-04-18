@@ -69,8 +69,8 @@ unsigned long long pgt_blocks_to_blocks(pgs_block_t** _target_blocks,
 		bit_in_target_block_index = 0;
 	while (1)
 	{
-		((pgs_block_t*)(*_target_blocks))[target_block_index].chunk[bit_in_target_block_index].bit =
-			_source_blocks[source_block_index].chunk[bit_in_source_block_index].bit;
+		pgb_copy_bit(&((pgs_block_t*)(*_target_blocks))[target_block_index], bit_in_target_block_index,
+			&_source_blocks[source_block_index], bit_in_source_block_index);
 		bit_in_source_block_index++;
 		if (unlikely(bit_in_source_block_index >= source_block_size))
 		{
@@ -108,7 +108,7 @@ double pgt_get_ber(pgs_block_t* _original,
 #pragma omp parallel for
 #endif
 	for (unsigned long long i = 0; i < _length; i++)
-		if(_original[0].chunk[i].bit != _distorted[0].chunk[i].bit)
+		if (!pgb_cmp_bit(&_original[0], i, &_distorted[0], i))
 #if defined(_OPENMP)
 #pragma omp atomic
 #endif
@@ -133,7 +133,7 @@ double pgt_get_ser(pgs_block_t* _original,
 	{
 		unsigned long long wrong_bits = 0;
 		for (unsigned long long j = 0; j < _original[i].chunk_size; j++)
-			if(_original[i].chunk[j].bit != _distorted[i].chunk[j].bit)
+			if (!pgb_cmp_bit(&_original[i], j, &_distorted[i], j))
 				wrong_bits++;
 		if (wrong_bits > 0)
 #if defined(_OPENMP)

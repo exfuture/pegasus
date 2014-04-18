@@ -277,10 +277,10 @@ static void pgf_encode_block_hamming74(pgs_block_t* _encoded_block,
 {
 	pgb_copy(_encoded_block, 0, _source_block, 0, PGF_HAMMING74_INPUT_BLOCK_SIZE);
 	for (unsigned long long i = 0; i < PGF_HAMMING74_FEC_SUFFIX; i++)
-		_encoded_block->chunk[PGF_HAMMING74_INPUT_BLOCK_SIZE + i].bit =
+		pgb_set_bit(_encoded_block, PGF_HAMMING74_INPUT_BLOCK_SIZE + i,
 			pgb_multixor(_source_block,
 					PGF_HAMMING74_FEC_BITS[i],
-					PGF_HAMMING74_FEC_SUFFIX);
+					PGF_HAMMING74_FEC_SUFFIX));
 }
 
 static void pgf_encode_block_crc(pgs_block_t* _encoded_block,
@@ -368,14 +368,14 @@ static void pgf_decode_block_hamming74(pgs_block_t* _decoded_block,
 	if (unlikely(syndrome_hamming74 == NULL))
 		pgp_null();
 	for (unsigned long long i = 0; i < PGF_HAMMING74_FEC_SUFFIX; i++)
-		syndrome_hamming74->chunk[i].bit =
+		pgb_set_bit(syndrome_hamming74, i,
 			pgb_multixor(_encoded_block,
 					PGF_HAMMING74_SYNDROME_BITS[i],
-					PGF_HAMMING74_INPUT_BLOCK_SIZE);
+					PGF_HAMMING74_INPUT_BLOCK_SIZE));
 	wrong_bit = pgb_block_to_ull(syndrome_hamming74);
 	pgb_copy(_decoded_block, 0, _encoded_block, 0, PGF_HAMMING74_INPUT_BLOCK_SIZE);
 	if (unlikely(wrong_bit > 0 && wrong_bit <= PGF_HAMMING74_INPUT_BLOCK_SIZE))
-		_decoded_block->chunk[wrong_bit - 1].bit = ~_decoded_block->chunk[wrong_bit - 1].bit;
+		pgb_flip_bit(_decoded_block, wrong_bit - 1);
 	pgb_destroy_block(syndrome_hamming74);
 }
 

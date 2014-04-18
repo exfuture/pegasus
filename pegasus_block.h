@@ -30,6 +30,16 @@ pgs_block_t* pgb_create_blocks(unsigned long long _count, unsigned long long _al
 pgs_block_t* pgb_create_block(unsigned long long _alignment);
 void pgb_destroy_block(pgs_block_t* _block);
 void pgb_destroy_blocks(pgs_block_t* _blocks, unsigned long long _amount);
+unsigned int pgb_get_bit(pgs_block_t* _block, unsigned long long _index);
+void pgb_set_bit(pgs_block_t* _block, unsigned long long _index, unsigned int _bit);
+void pgb_xor_bit(pgs_block_t* _block, unsigned long long _index, unsigned int _bit);
+void pgb_copyxor_bit(pgs_block_t* _target, unsigned long long _target_index,
+		pgs_block_t* _source, unsigned long long _source_index);
+void pgb_copy_bit(pgs_block_t* _target, unsigned long long _target_index,
+		pgs_block_t* _source, unsigned long long _source_index);
+void pgb_flip_bit(pgs_block_t* _block, unsigned long long _index);
+unsigned int pgb_cmp_bit(pgs_block_t* _block1, unsigned long long _index1,
+		pgs_block_t* _block2, unsigned long long _index2);
 unsigned long long pgb_block_to_ull(pgs_block_t* _block);
 void pgb_ull_to_block(pgs_block_t* _block,
 		unsigned long long _value);
