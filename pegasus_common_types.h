@@ -46,7 +46,7 @@ typedef struct pgs_bit
 typedef struct pgs_block
 {
 	pgs_bit_t* chunk;
-	unsigned long long chunk_size;
+	unsigned long long bits_count;
 	unsigned int used:1;
 } __attribute__((packed)) pgs_block_t;
 

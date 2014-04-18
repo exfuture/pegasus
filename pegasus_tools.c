@@ -49,7 +49,7 @@ unsigned long long pgt_blocks_to_blocks(pgs_block_t** _target_blocks,
 	if (unlikely(_source_blocks == NULL))
 		return 0;
 
-	unsigned long long source_block_size = _source_blocks[0].chunk_size;
+	unsigned long long source_block_size = _source_blocks[0].bits_count;
 
 	if (unlikely(_target_block_size == 0))
 		_target_block_size = source_block_size;
@@ -132,7 +132,7 @@ double pgt_get_ser(pgs_block_t* _original,
 	for (unsigned long long i = 0; i < _blocks_count; i++)
 	{
 		unsigned long long wrong_bits = 0;
-		for (unsigned long long j = 0; j < _original[i].chunk_size; j++)
+		for (unsigned long long j = 0; j < _original[i].bits_count; j++)
 			if (!pgb_cmp_bit(&_original[i], j, &_distorted[i], j))
 				wrong_bits++;
 		if (wrong_bits > 0)

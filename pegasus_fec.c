@@ -306,7 +306,7 @@ static void pgf_encode_block(pgs_block_t* _encoded_block,
 	switch (_fec)
 	{
 		case PGF_NONE:
-			pgb_copy(_encoded_block, 0, _source_block, 0, _source_block->chunk_size);
+			pgb_copy(_encoded_block, 0, _source_block, 0, _source_block->bits_count);
 			break;
 		case PGF_HAMMING74:
 			pgf_encode_block_hamming74(_encoded_block, _source_block);
@@ -346,7 +346,7 @@ unsigned long long pgf_encode_blocks(pgs_block_t** _encoded_blocks,
 	if (unlikely(_source_blocks == NULL))
 		return 0;
 
-	*_encoded_blocks = pgb_create_blocks(_source_blocks_count, _fec == PGF_NONE ? _source_blocks[0].chunk_size : pgf_get_output_block_size(_fec));
+	*_encoded_blocks = pgb_create_blocks(_source_blocks_count, _fec == PGF_NONE ? _source_blocks[0].bits_count : pgf_get_output_block_size(_fec));
 	if (unlikely(*_encoded_blocks == NULL))
 		pgp_null();
 
@@ -405,7 +405,7 @@ static void pgf_decode_block(pgs_block_t* _decoded_block,
 	switch (_fec)
 	{
 		case PGF_NONE:
-			pgb_copy(_decoded_block, 0, _encoded_block, 0, _encoded_block->chunk_size);
+			pgb_copy(_decoded_block, 0, _encoded_block, 0, _encoded_block->bits_count);
 			break;
 		case PGF_HAMMING74:
 			pgf_decode_block_hamming74(_decoded_block, _encoded_block);
@@ -445,7 +445,7 @@ unsigned long long pgf_decode_blocks(pgs_block_t** _decoded_blocks,
 	if (unlikely(_encoded_blocks == NULL))
 		return 0;
 
-	*_decoded_blocks = pgb_create_blocks(_encoded_blocks_count, _fec == PGF_NONE ? _encoded_blocks[0].chunk_size : pgf_get_input_block_size(_fec));
+	*_decoded_blocks = pgb_create_blocks(_encoded_blocks_count, _fec == PGF_NONE ? _encoded_blocks[0].bits_count : pgf_get_input_block_size(_fec));
 	if (unlikely(*_decoded_blocks == NULL))
 		pgp_null();
 
