@@ -33,16 +33,37 @@
 
 void pgr_init_seed()
 {
-	struct timespec current_time;
+	struct timespec current_time, next_time;
 	pgr_seed = malloc(sizeof(uint64_t) * pgt_threads);
 	if (unlikely(pgr_seed == NULL))
 		pgp_malloc();
 
 	for (unsigned long long i = 0; i < pgt_threads; i++)
 	{
-		if (unlikely(clock_gettime(CLOCK_REALTIME, &current_time) != 0))
-			pgp_clock_gettime();
+		unsigned long long ns_diff;
+		do
+		{
+			if (unlikely(clock_gettime(CLOCK_REALTIME, &current_time) != 0))
+				pgp_clock_gettime();
+			if (unlikely(clock_gettime(CLOCK_REALTIME, &next_time) != 0))
+				pgp_clock_gettime();
+			ns_diff = next_time.tv_sec * 1000000000ULL + next_time.tv_nsec -
+				current_time.tv_sec * 1000000000ULL - current_time.tv_nsec;
+		} while (ns_diff < PGS_UINT64_SIZE);
+
 		pgr_seed[i] = current_time.tv_sec * 1000000000L + current_time.tv_nsec;
+
+		for (unsigned long long j = PGS_UINT64_SIZE - 1; j >= 1; j--)
+		{
+			unsigned long long current_random = ns_diff % j;
+			unsigned int bit1 = !!(pgr_seed[i] & 1ULL << current_random);
+			unsigned int bit2 = !!(pgr_seed[i] & 1ULL << j);
+			if (bit1 != bit2)
+			{
+				pgr_seed[i] ^= 1ULL << current_random;
+				pgr_seed[i] ^= 1ULL << j;
+			}
+		}
 	}
 }
 
