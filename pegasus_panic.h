@@ -24,10 +24,12 @@
  * pegasus — digital channel simulator, panic file header
  */
 
+#include <errno.h>
+
 #define pgp_malloc() \
-	__pgp_malloc(__func__, __FILE__, __LINE__)
+	__pgp_malloc(__func__, __FILE__, __LINE__, errno)
 #define pgp_clock_gettime() \
-	__pgp_clock_gettime(__func__, __FILE__, __LINE__)
+	__pgp_clock_gettime(__func__, __FILE__, __LINE__, errno)
 #define pgp_switch_default() \
 	__pgp_switch_default(__func__, __FILE__, __LINE__)
 #define pgp_null() \
@@ -41,8 +43,8 @@ __pgp_nodata(__func__, __FILE__, __LINE__)
 #define PGP_BACKTRACE_SIZE 10
 
 void pgp_usage(char _key, char* _keyvalue);
-void __pgp_malloc(const char* _function_name, const char* _file_name, int _line_number);
-void __pgp_clock_gettime(const char* _function_name, const char* _file_name, int _line_number);
+void __pgp_malloc(const char* _function_name, const char* _file_name, int _line_number, int _errno);
+void __pgp_clock_gettime(const char* _function_name, const char* _file_name, int _line_number, int _errno);
 void __pgp_switch_default(const char* _function_name, const char* _file_name, int _line_number);
 void __pgp_null(const char* _function_name, const char* _file_name, int _line_number);
 void __pgp_range(const char* _function_name, const char* _file_name, int _line_number);

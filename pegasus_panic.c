@@ -22,6 +22,7 @@
 #include <execinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sysexits.h>
 
 #include "pegasus_panic.h"
@@ -47,16 +48,16 @@ void pgp_usage(char _key, char* _keyvalue)
 	exit(EX_USAGE);
 }
 
-void __pgp_malloc(const char* _function_name, const char* _file_name, int _line_number)
+void __pgp_malloc(const char* _function_name, const char* _file_name, int _line_number, int _errno)
 {
-	fprintf(stderr, "malloc failed: file=%s, function=%s, line=%d\n", _file_name, _function_name, _line_number);
+	fprintf(stderr, "malloc failed: file=%s, function=%s, line=%d (%s)\n", _file_name, _function_name, _line_number, strerror(_errno));
 	pgp_show_stacktrace();
 	exit(EX_OSERR);
 }
 
-void __pgp_clock_gettime(const char* _function_name, const char* _file_name, int _line_number)
+void __pgp_clock_gettime(const char* _function_name, const char* _file_name, int _line_number, int _errno)
 {
-	fprintf(stderr, "clock_gettime failed: file=%s, function=%s, line=%d\n", _file_name, _function_name, _line_number);
+	fprintf(stderr, "clock_gettime failed: file=%s, function=%s, line=%d (%s)\n", _file_name, _function_name, _line_number, strerror(_errno));
 	pgp_show_stacktrace();
 	exit(EX_OSERR);
 }
