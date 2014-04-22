@@ -62,28 +62,18 @@ unsigned long long pgt_blocks_to_blocks(pgs_block_t** _target_blocks,
 	if (unlikely(*_target_blocks == NULL))
 		pgp_null();
 
-	unsigned long long
-		source_block_index = 0,
-		bit_in_source_block_index = 0,
-		target_block_index = 0,
-		bit_in_target_block_index = 0;
-	while (1)
+#if defined(_OPENMP)
+#pragma omp parallel for
+#endif
+	for (unsigned long long i = 0; i < _source_blocks_count; i++)
 	{
-		pgb_copy_bit(&((pgs_block_t*)(*_target_blocks))[target_block_index], bit_in_target_block_index,
-			&_source_blocks[source_block_index], bit_in_source_block_index);
-		bit_in_source_block_index++;
-		if (unlikely(bit_in_source_block_index >= source_block_size))
+		unsigned long long source_bits_passed = i * source_block_size;
+		for (unsigned long long j = 0; j < source_block_size; j++)
 		{
-			bit_in_source_block_index = 0;
-			source_block_index++;
-		}
-		if (unlikely(source_block_index >= _source_blocks_count))
-			break;
-		bit_in_target_block_index++;
-		if (unlikely(bit_in_target_block_index >= _target_block_size))
-		{
-			bit_in_target_block_index = 0;
-			target_block_index++;
+			unsigned long long source_bit_serial_index = source_bits_passed + j;
+			unsigned long long target_block_index = source_bit_serial_index / _target_block_size;
+			unsigned long long target_bit_index = source_bit_serial_index % _target_block_size;
+			pgb_copy_bit(&((pgs_block_t*)(*_target_blocks))[target_block_index], target_bit_index, &_source_blocks[i], j);
 		}
 	}
 
