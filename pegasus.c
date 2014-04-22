@@ -330,16 +330,71 @@ int main(int argc, char** argv)
 							pgs_data_source_blocks_count));
 		}
 
-		pgb_destroy_blocks(pgs_data_target_blocks, pgs_data_target_blocks_count);
-		pgb_destroy_blocks(pgs_data_decoded_blocks, pgs_data_decoded_blocks_count);
-		pgb_destroy_blocks(pgs_data_predecoded_blocks, pgs_data_predecoded_blocks_count);
-		pgb_destroy_blocks(pgs_data_demodulated_blocks, pgs_data_demodulated_blocks_count);
-		free(pgs_data_noised_signals);
-		free(pgs_data_modulated_signals);
-		pgb_destroy_blocks(pgs_data_premodulated_blocks, pgs_data_premodulated_blocks_count);
-		pgb_destroy_blocks(pgs_data_encoded_blocks, pgs_data_encoded_blocks_count);
-		pgb_destroy_blocks(pgs_data_source_blocks, pgs_data_source_blocks_count);
-		pgb_destroy_block(pgs_data_source);
+#if defined (_OPENMP)
+#pragma omp parallel sections
+#endif
+	{
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgs_data_target_blocks, pgs_data_target_blocks_count);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgs_data_decoded_blocks, pgs_data_decoded_blocks_count);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgs_data_predecoded_blocks, pgs_data_predecoded_blocks_count);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgs_data_demodulated_blocks, pgs_data_demodulated_blocks_count);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			free(pgs_data_noised_signals);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			free(pgs_data_modulated_signals);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgs_data_premodulated_blocks, pgs_data_premodulated_blocks_count);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgs_data_encoded_blocks, pgs_data_encoded_blocks_count);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_blocks(pgs_data_source_blocks, pgs_data_source_blocks_count);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgb_destroy_block(pgs_data_source);
+		}
+	}
 	}
 
 	pgf_done_syndromes();
