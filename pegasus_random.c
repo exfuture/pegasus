@@ -58,7 +58,7 @@ void pgr_init_seed()
 			unsigned long long current_random = ns_diff % j;
 			unsigned int bit1 = !!(pgr_seed[i] & 1ULL << current_random);
 			unsigned int bit2 = !!(pgr_seed[i] & 1ULL << j);
-			if (bit1 != bit2)
+			if (likely(bit1 != bit2))
 			{
 				pgr_seed[i] ^= 1ULL << current_random;
 				pgr_seed[i] ^= 1ULL << j;
