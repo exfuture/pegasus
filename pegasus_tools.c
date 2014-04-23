@@ -41,6 +41,15 @@ void pgt_init_threads()
 #endif
 }
 
+void* pgt_alloc(size_t _items, size_t _item_size)
+{
+	void* pointer = calloc(_items, _item_size);
+	if (unlikely(pointer == NULL))
+		pgp_malloc();
+
+	return pointer;
+}
+
 unsigned long long pgt_blocks_to_blocks(pgs_block_t** _target_blocks,
 		pgs_block_t* _source_blocks,
 		unsigned long long _source_blocks_count,

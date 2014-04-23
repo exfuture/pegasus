@@ -34,9 +34,7 @@
 void pgr_init_seed()
 {
 	struct timespec current_time, next_time;
-	pgr_seed = malloc(sizeof(uint64_t) * pgt_threads);
-	if (unlikely(pgr_seed == NULL))
-		pgp_malloc();
+	pgr_seed = pgt_alloc(pgt_threads, sizeof(uint64_t));
 
 	for (unsigned long long i = 0; i < pgt_threads; i++)
 	{

@@ -445,9 +445,7 @@ unsigned long long pgm_modulate(pgs_signal_t** _modulated_signals,
 	if (unlikely(_premodulated_blocks == NULL))
 		return 0;
 
-	*_modulated_signals = malloc(sizeof(pgs_signal_t) * _premodulated_blocks_count);
-	if (unlikely(*_modulated_signals == NULL))
-		pgp_malloc();
+	*_modulated_signals = pgt_alloc(_premodulated_blocks_count, sizeof(pgs_signal_t));
 
 #if defined (_OPENMP)
 #pragma omp parallel for

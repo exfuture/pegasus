@@ -26,23 +26,17 @@
 #include "pegasus_common_types.h"
 
 #include "pegasus_panic.h"
+#include "pegasus_tools.h"
 
 #include "pegasus_block.h"
 
 pgs_block_t* pgb_create_blocks(unsigned long long _count, unsigned long long _alignment)
 {
-	pgs_block_t* ret = malloc(sizeof(pgs_block_t) * _count);
-	if (unlikely(ret == NULL))
-		return NULL;
+	pgs_block_t* ret = pgt_alloc(_count, sizeof(pgs_block_t));
 	for (unsigned long long i = 0; i < _count; i++)
 	{
-		ret[i].chunk = malloc(sizeof(pgs_bit_t) * _alignment);
-		if (unlikely(ret[i].chunk == NULL))
-			pgp_malloc();
-		for (unsigned long long j = 0; j < _alignment; j++)
-			pgb_set_bit(&ret[i], j, 0);
+		ret[i].chunk = pgt_alloc(_alignment, sizeof(pgs_bit_t));
 		ret[i].bits_count = _alignment;
-		ret[i].used = 0;
 	}
 	return ret;
 }

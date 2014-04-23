@@ -30,6 +30,7 @@
 
 #include "pegasus_panic.h"
 #include "pegasus_random.h"
+#include "pegasus_tools.h"
 
 #include "pegasus_channel.h"
 
@@ -111,9 +112,7 @@ unsigned long long pgc_add_noise(pgs_signal_t** _noised_signals,
 	if (unlikely(_modulated_signals == NULL))
 		return 0;
 
-	*_noised_signals = malloc(sizeof(pgs_signal_t) * _modulated_signals_count);
-	if (unlikely(*_noised_signals == NULL))
-		pgp_malloc();
+	*_noised_signals = pgt_alloc(_modulated_signals_count, sizeof(pgs_signal_t));
 
 #if defined(_OPENMP)
 #pragma omp parallel for
