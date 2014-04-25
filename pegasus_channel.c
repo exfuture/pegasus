@@ -86,9 +86,6 @@ static void pgc_add_noise_to_signal(pgs_signal_t* _noised_signal,
 		unsigned long long _channel,
 		double _hsquare)
 {
-	if (unlikely(_noised_signal == NULL || _clean_signal == NULL))
-		pgp_null();
-
 	switch (_channel)
 	{
 		case PGC_AWGN:

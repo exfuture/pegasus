@@ -68,8 +68,6 @@ unsigned long long pgt_blocks_to_blocks(pgs_block_t** _target_blocks,
 		target_blocks_count++;
 
 	*_target_blocks = pgb_create_blocks(target_blocks_count, _target_block_size);
-	if (unlikely(*_target_blocks == NULL))
-		pgp_null();
 
 #if defined(_OPENMP)
 #pragma omp parallel for

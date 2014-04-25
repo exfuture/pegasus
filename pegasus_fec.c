@@ -41,8 +41,6 @@ void pgf_init_polynomes()
 #endif
 		{
 			pgf_polynome_cyclic85 = pgb_create_block(PGF_CYCLIC85_FEC_SUFFIX + 1);
-			if (unlikely(pgf_polynome_cyclic85 == NULL))
-				pgp_null();
 			pgb_binary_string_to_block(pgf_polynome_cyclic85, PGF_CYCLIC85_POLYNOME);
 		}
 
@@ -51,8 +49,6 @@ void pgf_init_polynomes()
 #endif
 		{
 			pgf_polynome_bch1557 = pgb_create_block(PGF_BCH1557_FEC_SUFFIX + 1);
-			if (unlikely(pgf_polynome_bch1557 == NULL))
-				pgp_null();
 			pgb_binary_string_to_block(pgf_polynome_bch1557, PGF_BCH1557_POLYNOME);
 		}
 
@@ -61,8 +57,6 @@ void pgf_init_polynomes()
 #endif
 		{
 			pgf_polynome_bch1575 = pgb_create_block(PGF_BCH1575_FEC_SUFFIX + 1);
-			if (unlikely(pgf_polynome_bch1575 == NULL))
-				pgp_null();
 			pgb_binary_string_to_block(pgf_polynome_bch1575, PGF_BCH1575_POLYNOME);
 		}
 	}
@@ -300,9 +294,6 @@ static void pgf_encode_block(pgs_block_t* _encoded_block,
 		pgs_block_t* _source_block,
 		unsigned long long _fec)
 {
-	if (unlikely(_encoded_block == NULL || _source_block == NULL))
-		pgp_null();
-
 	switch (_fec)
 	{
 		case PGF_NONE:
@@ -347,8 +338,6 @@ unsigned long long pgf_encode_blocks(pgs_block_t** _encoded_blocks,
 		return 0;
 
 	*_encoded_blocks = pgb_create_blocks(_source_blocks_count, _fec == PGF_NONE ? _source_blocks[0].bits_count : pgf_get_output_block_size(_fec));
-	if (unlikely(*_encoded_blocks == NULL))
-		pgp_null();
 
 #if defined (_OPENMP)
 #pragma omp parallel for
@@ -365,8 +354,6 @@ static void pgf_decode_block_hamming74(pgs_block_t* _decoded_block,
 {
 	unsigned long long wrong_bit = 0;
 	pgs_block_t* syndrome_hamming74 = pgb_create_block(PGF_HAMMING74_FEC_SUFFIX);
-	if (unlikely(syndrome_hamming74 == NULL))
-		pgp_null();
 	for (unsigned long long i = 0; i < PGF_HAMMING74_FEC_SUFFIX; i++)
 		pgb_set_bit(syndrome_hamming74, i,
 			pgb_multixor(_encoded_block,
@@ -399,9 +386,6 @@ static void pgf_decode_block(pgs_block_t* _decoded_block,
 		pgs_block_t* _encoded_block,
 		unsigned long long _fec)
 {
-	if (unlikely(_decoded_block == NULL || _encoded_block == NULL))
-		pgp_null();
-
 	switch (_fec)
 	{
 		case PGF_NONE:
@@ -446,8 +430,6 @@ unsigned long long pgf_decode_blocks(pgs_block_t** _decoded_blocks,
 		return 0;
 
 	*_decoded_blocks = pgb_create_blocks(_encoded_blocks_count, _fec == PGF_NONE ? _encoded_blocks[0].bits_count : pgf_get_input_block_size(_fec));
-	if (unlikely(*_decoded_blocks == NULL))
-		pgp_null();
 
 #if defined (_OPENMP)
 #pragma omp parallel for

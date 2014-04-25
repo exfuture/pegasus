@@ -377,9 +377,6 @@ unsigned long long pgm_get_block_size(unsigned int _modulation)
 
 static void pgm_modulate_block(pgs_signal_t* _signal, pgs_block_t* _block, unsigned int _modulation)
 {
-	if (unlikely(_signal == NULL || _block == NULL))
-		pgp_null();
-
 	pgs_signal_t* current_signal = NULL;
 	switch (_modulation)
 	{
@@ -463,9 +460,6 @@ static void pgm_find_block(pgs_block_t* _block,
 		unsigned long long _table_size,
 		double _minimum)
 {
-	if (unlikely(_block == NULL || _table == NULL))
-		pgp_null();
-
 	unsigned long long min_index = 0;
 	double min_distance = pgt_distance(_real_i, _real_q, _table[0].i, _table[0].q);
 	for (unsigned long long i = 1; i < _table_size; i++)
@@ -487,9 +481,6 @@ static void pgm_find_block(pgs_block_t* _block,
 
 static void pgm_demodulate_block(pgs_block_t* _demodulated_block, pgs_signal_t* _modulated_signal, unsigned int _modulation)
 {
-	if (unlikely(_demodulated_block == NULL || _modulated_signal == NULL))
-		pgp_null();
-
 	switch (_modulation)
 	{
 		case PGM_ASK:
@@ -627,8 +618,6 @@ unsigned long long pgm_demodulate(pgs_block_t** _demodulated_blocks,
 		return 0;
 
 	*_demodulated_blocks = pgb_create_blocks(_modulated_signals_count, pgm_get_block_size(_modulation));
-	if (unlikely(*_demodulated_blocks == NULL))
-		pgp_null();
 
 #if defined (_OPENMP)
 #pragma omp parallel for

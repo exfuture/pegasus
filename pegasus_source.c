@@ -87,8 +87,6 @@ static void pgs_generate_predefined(pgs_block_t* _data_buffer,
 	unsigned long long extra_bits = _amount % modulation_block_size;
 	unsigned long long current_index = 0;
 	pgs_block_t* current_block = pgb_create_block(modulation_block_size);
-	if (unlikely(current_block == NULL))
-		pgp_null();
 	for (unsigned long long i = 0; i < _amount - extra_bits; i += modulation_block_size)
 	{
 		pgb_ull_to_block(current_block, current_index);
@@ -112,8 +110,6 @@ unsigned long long pgs_generate(pgs_block_t** _data_buffer,
 		unsigned long long _amount)
 {
 	*_data_buffer = pgb_create_block(_amount);
-	if (unlikely(*_data_buffer == NULL))
-		pgp_null();
 
 	switch (_source)
 	{

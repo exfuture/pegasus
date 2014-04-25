@@ -48,14 +48,8 @@ pgs_block_t* pgb_create_block(unsigned long long _alignment)
 
 void pgb_destroy_blocks(pgs_block_t* _blocks, unsigned long long _amount)
 {
-	if (unlikely(_blocks == NULL))
-		pgp_null();
 	for (unsigned long long i = 0; i < _amount; i++)
-	{
-		if (unlikely(_blocks[i].chunk == NULL))
-			pgp_null();
 		free(_blocks[i].chunk);
-	}
 	free(_blocks);
 }
 
@@ -66,25 +60,16 @@ void pgb_destroy_block(pgs_block_t* _block)
 
 inline unsigned int pgb_get_bit(pgs_block_t* _block, unsigned long long _index)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-
 	return _block->chunk[_index].bit;
 }
 
 inline void pgb_set_bit(pgs_block_t* _block, unsigned long long _index, unsigned int _bit)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-
 	_block->chunk[_index].bit = _bit;
 }
 
 inline void pgb_xor_bit(pgs_block_t* _block, unsigned long long _index, unsigned int _bit)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-
 	_block->chunk[_index].bit ^= _bit;
 }
 
@@ -92,44 +77,29 @@ inline void pgb_copyxor_bit(pgs_block_t* _target, unsigned long long _target_ind
 		pgs_block_t* _source, unsigned long long _source_index)
 
 {
-	if (unlikely(_target == NULL) || unlikely(_source == NULL))
-		pgp_null();
-
 	_target->chunk[_target_index].bit ^= _source->chunk[_source_index].bit;
 }
 
 inline void pgb_copy_bit(pgs_block_t* _target, unsigned long long _target_index,
 		pgs_block_t* _source, unsigned long long _source_index)
 {
-	if (unlikely(_target == NULL) || unlikely(_source == NULL))
-		pgp_null();
-
 	_target->chunk[_target_index].bit = _source->chunk[_source_index].bit;
 }
 
 inline void pgb_flip_bit(pgs_block_t* _block, unsigned long long _index)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-
 	_block->chunk[_index].bit = ~_block->chunk[_index].bit;
 }
 
 inline unsigned int pgb_cmp_bit(pgs_block_t* _block1, unsigned long long _index1,
 		pgs_block_t* _block2, unsigned long long _index2)
 {
-	if (unlikely(_block1 == NULL) || unlikely(_block2 == NULL))
-		pgp_null();
-
 	return _block1->chunk[_index1].bit == _block2->chunk[_index2].bit;
 }
 
 
 unsigned long long pgb_block_to_ull(pgs_block_t* _block)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-
 	unsigned long long ret = 0;
 
 	for (unsigned long long i = 0; i < _block->bits_count; i++)
@@ -142,11 +112,6 @@ unsigned long long pgb_block_to_ull(pgs_block_t* _block)
 void pgb_ull_to_block(pgs_block_t* _block,
 		unsigned long long _value)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-	if (unlikely(_block->chunk == NULL))
-		pgp_null();
-
 	for (unsigned long long i = 0; i < _block->bits_count; i++)
 		pgb_set_bit(_block, _block->bits_count - i - 1, (_value & ( 1ULL << i )) >> i);
 }
@@ -154,9 +119,6 @@ void pgb_ull_to_block(pgs_block_t* _block,
 void pgb_binary_string_to_block(pgs_block_t* _block,
 		const char* _binary_string)
 {
-	if (unlikely(_binary_string == NULL))
-		pgp_null();
-
 	for (unsigned long long i = 0; i < strlen(_binary_string); i++)
 		pgb_set_bit(_block, i, _binary_string[i] == '1' ? 1 : 0);
 }
@@ -164,8 +126,6 @@ void pgb_binary_string_to_block(pgs_block_t* _block,
 void pgb_divmod2(pgs_block_t** _quotient, pgs_block_t* _dividend, pgs_block_t* _divisor)
 {
 	pgs_block_t* tmp = pgb_create_block(_dividend->bits_count);
-	if (unlikely(tmp == NULL))
-		pgp_null();
 	pgb_copy(tmp, 0, _dividend, 0, _dividend->bits_count);
 
 	for (unsigned long long i = 0; i < _dividend->bits_count - _divisor->bits_count + 1; i++)
@@ -174,8 +134,6 @@ void pgb_divmod2(pgs_block_t** _quotient, pgs_block_t* _dividend, pgs_block_t* _
 				pgb_copyxor_bit(tmp, i + j, _divisor, j);
 
 	*_quotient = pgb_create_block(_divisor->bits_count - 1);
-	if (unlikely(*_quotient == NULL))
-		pgp_null();
 	pgb_copy(((pgs_block_t*)(*_quotient)), 0, tmp, _dividend->bits_count - _divisor->bits_count + 1, _divisor->bits_count - 1);
 	pgb_destroy_block(tmp);
 }
@@ -188,9 +146,6 @@ void pgb_xor(pgs_block_t* _target, pgs_block_t* _pattern)
 
 unsigned int pgb_multixor(pgs_block_t* _block, unsigned long long* _bits, unsigned long long _length)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-
 	unsigned long long ret = 0;
 	for (unsigned long long i = 0; i < _length; i++)
 		ret ^= pgb_get_bit(_block, _bits[i]);
@@ -203,8 +158,6 @@ void pgb_copy(pgs_block_t* _destination,
 		unsigned long long _source_index,
 		unsigned long long _amount)
 {
-	if (unlikely(_destination == NULL || _source == NULL))
-		pgp_null();
 	if (unlikely(_destination_index + _amount > _destination->bits_count ||
 			_source_index + _amount > _source->bits_count))
 		pgp_range();
@@ -215,9 +168,6 @@ void pgb_copy(pgs_block_t* _destination,
 
 void pgb_show_blocks(pgs_block_t* _block, unsigned long long _count)
 {
-	if (unlikely(_block == NULL))
-		pgp_null();
-
 	for (unsigned long long i = 0; i < _count; i++)
 	{
 		for (unsigned long long j = 0; j < _block[i].bits_count; j++)
