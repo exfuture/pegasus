@@ -34,11 +34,13 @@
 #define PGM_64PSK	8
 #define PGM_256PSK	9
 #define PGM_1024PSK	10
-#define PGM_16QAM	11
-#define PGM_32QAM	12
-#define PGM_64QAM	13
-#define PGM_256QAM	14
-#define PGM_1024QAM	15
+#define PGM_4096PSK	11
+#define PGM_16QAM	12
+#define PGM_32QAM	13
+#define PGM_64QAM	14
+#define PGM_256QAM	15
+#define PGM_1024QAM	16
+#define PGM_4096QAM	17
 
 #define PGM_ASK_STRING		"Amplitude-shift keying"
 #define PGM_FSK_STRING		"Frequency-shift keying"
@@ -50,11 +52,13 @@
 #define PGM_64PSK_STRING	"64-phase shift keying"
 #define PGM_256PSK_STRING	"256-phase shift keying"
 #define PGM_1024PSK_STRING	"1024-phase shift keying"
+#define PGM_4096PSK_STRING	"4096-phase shift keying"
 #define PGM_16QAM_STRING	"16-quadrature-amplitude modulation"
 #define PGM_32QAM_STRING	"32-quadrature-amplitude modulation"
 #define PGM_64QAM_STRING	"64-quadrature-amplitude modulation"
 #define PGM_256QAM_STRING	"256-quadrature-amplitude modulation"
 #define PGM_1024QAM_STRING	"1024-quadrature-amplitude modulation"
+#define PGM_4096QAM_STRING	"4096-quadrature-amplitude modulation"
 
 #define PGM_UNKNOWN_BLOCK_SIZE	0
 #define PGM_ASK_BLOCK_SIZE	1
@@ -67,11 +71,13 @@
 #define PGM_64PSK_BLOCK_SIZE	6
 #define PGM_256PSK_BLOCK_SIZE	8
 #define PGM_1024PSK_BLOCK_SIZE	10
+#define PGM_4096PSK_BLOCK_SIZE	12
 #define PGM_16QAM_BLOCK_SIZE	4
 #define PGM_32QAM_BLOCK_SIZE	5
 #define PGM_64QAM_BLOCK_SIZE	6
 #define PGM_256QAM_BLOCK_SIZE	8
 #define PGM_1024QAM_BLOCK_SIZE	10
+#define PGM_4096QAM_BLOCK_SIZE	12
 
 #define PGM_UNKNOWN_VOLUME	0
 #define PGM_ASK_VOLUME		(1ULL << PGM_ASK_BLOCK_SIZE)
@@ -84,11 +90,13 @@
 #define PGM_64PSK_VOLUME	(1ULL << PGM_64PSK_BLOCK_SIZE)
 #define PGM_256PSK_VOLUME	(1ULL << PGM_256PSK_BLOCK_SIZE)
 #define PGM_1024PSK_VOLUME	(1ULL << PGM_1024PSK_BLOCK_SIZE)
+#define PGM_4096PSK_VOLUME	(1ULL << PGM_4096PSK_BLOCK_SIZE)
 #define PGM_16QAM_VOLUME	(1ULL << PGM_16QAM_BLOCK_SIZE)
 #define PGM_32QAM_VOLUME	(1ULL << PGM_32QAM_BLOCK_SIZE)
 #define PGM_64QAM_VOLUME	(1ULL << PGM_64QAM_BLOCK_SIZE)
 #define PGM_256QAM_VOLUME	(1ULL << PGM_256QAM_BLOCK_SIZE)
 #define PGM_1024QAM_VOLUME	(1ULL << PGM_1024QAM_BLOCK_SIZE)
+#define PGM_4096QAM_VOLUME	(1ULL << PGM_4096QAM_BLOCK_SIZE)
 
 #define PGM_ASK_ANGLE_STEP	0
 #define PGM_FSK_ANGLE_STEP	(M_PI / 4.0)
@@ -100,6 +108,7 @@
 #define PGM_64PSK_ANGLE_STEP	(M_PI / 64.0)
 #define PGM_256PSK_ANGLE_STEP	(M_PI / 256.0)
 #define PGM_1024PSK_ANGLE_STEP	(M_PI / 1024.0)
+#define PGM_4096PSK_ANGLE_STEP	(M_PI / 4096.0)
 
 #define PGM_ASK_PHASE_SHIFT	0
 #define PGM_FSK_PHASE_SHIFT	0
@@ -111,18 +120,21 @@
 #define PGM_64PSK_PHASE_SHIFT	0
 #define PGM_256PSK_PHASE_SHIFT	0
 #define PGM_1024PSK_PHASE_SHIFT	0
+#define PGM_4096PSK_PHASE_SHIFT	0
 
 #define PGM_16QAM_BOUND		3
 #define PGM_32QAM_BOUND		5
 #define PGM_64QAM_BOUND		7
 #define PGM_256QAM_BOUND	15
 #define PGM_1024QAM_BOUND	31
+#define PGM_4096QAM_BOUND	63
 
 #define PGM_16QAM_NORMALIZATION		(1.0 / (PGM_16QAM_BOUND * sqrt(2.0)))
 #define PGM_32QAM_NORMALIZATION		(1.0 / (PGM_32QAM_BOUND * sqrt(2.0)))
 #define PGM_64QAM_NORMALIZATION		(1.0 / (PGM_64QAM_BOUND * sqrt(2.0)))
 #define PGM_256QAM_NORMALIZATION	(1.0 / (PGM_256QAM_BOUND * sqrt(2.0)))
 #define PGM_1024QAM_NORMALIZATION	(1.0 / (PGM_1024QAM_BOUND * sqrt(2.0)))
+#define PGM_4096QAM_NORMALIZATION	(1.0 / (PGM_4096QAM_BOUND * sqrt(2.0)))
 
 #define PGM_ASK_MINIMUM		0.5
 #define PGM_FSK_MINIMUM		sin(PGM_FSK_ANGLE_STEP)
@@ -134,11 +146,13 @@
 #define PGM_64PSK_MINIMUM	sin(PGM_64PSK_ANGLE_STEP)
 #define PGM_256PSK_MINIMUM	sin(PGM_256PSK_ANGLE_STEP)
 #define PGM_1024PSK_MINIMUM	sin(PGM_1024PSK_ANGLE_STEP)
+#define PGM_4096PSK_MINIMUM	sin(PGM_4096PSK_ANGLE_STEP)
 #define PGM_16QAM_MINIMUM	PGM_16QAM_NORMALIZATION
 #define PGM_32QAM_MINIMUM	PGM_32QAM_NORMALIZATION
 #define PGM_64QAM_MINIMUM	PGM_64QAM_NORMALIZATION
 #define PGM_256QAM_MINIMUM	PGM_256QAM_NORMALIZATION
 #define PGM_1024QAM_MINIMUM	PGM_1024QAM_NORMALIZATION
+#define PGM_4096QAM_MINIMUM	PGM_4096QAM_NORMALIZATION
 
 pgs_signal_t pgm_ask_table[PGM_ASK_VOLUME];
 pgs_signal_t pgm_fsk_table[PGM_FSK_VOLUME];
@@ -150,11 +164,13 @@ pgs_signal_t pgm_32psk_table[PGM_32PSK_VOLUME];
 pgs_signal_t pgm_64psk_table[PGM_64PSK_VOLUME];
 pgs_signal_t pgm_256psk_table[PGM_256PSK_VOLUME];
 pgs_signal_t pgm_1024psk_table[PGM_1024PSK_VOLUME];
+pgs_signal_t pgm_4096psk_table[PGM_4096PSK_VOLUME];
 pgs_signal_t pgm_16qam_table[PGM_16QAM_VOLUME];
 pgs_signal_t pgm_32qam_table[PGM_32QAM_VOLUME];
 pgs_signal_t pgm_64qam_table[PGM_64QAM_VOLUME];
 pgs_signal_t pgm_256qam_table[PGM_256QAM_VOLUME];
 pgs_signal_t pgm_1024qam_table[PGM_1024QAM_VOLUME];
+pgs_signal_t pgm_4096qam_table[PGM_4096QAM_VOLUME];
 
 void pgm_init_tables();
 char* pgm_to_string(unsigned int _modulation);

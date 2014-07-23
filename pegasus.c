@@ -142,6 +142,8 @@ int main(int argc, char** argv)
 					pgs_modulation = PGM_256PSK;
 				else if (strcmp(optarg, "1024psk") == 0)
 					pgs_modulation = PGM_1024PSK;
+				else if (strcmp(optarg, "4096psk") == 0)
+					pgs_modulation = PGM_4096PSK;
 				else if (strcmp(optarg, "16qam") == 0)
 					pgs_modulation = PGM_16QAM;
 				else if (strcmp(optarg, "32qam") == 0)
@@ -152,6 +154,8 @@ int main(int argc, char** argv)
 					pgs_modulation = PGM_256QAM;
 				else if (strcmp(optarg, "1024qam") == 0)
 					pgs_modulation = PGM_1024QAM;
+				else if (strcmp(optarg, "4096qam") == 0)
+					pgs_modulation = PGM_4096QAM;
 				else
 					pgp_usage(opts, optarg);
 				break;

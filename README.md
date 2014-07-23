@@ -20,11 +20,13 @@ pegasus supports the following types of modulation:
 * 64PSK
 * 256PSK
 * 1024PSK
+* 4096PSK
 * 16QAM
 * 32QAM (with non-optimal Gray-coding scheme)
 * 64QAM
 * 256QAM
 * 1024QAM
+* 4096QAM
 
 Also the following FEC codes are supported:
 
@@ -107,11 +109,13 @@ However, it's possible to change everything with following arguments:
 	* 64psk — phase-shift keying with 6 bits per symbol
 	* 256psk — phase-shift keying with 8 bits per symbol
 	* 1024psk — phase-shift keying with 10 bits per symbol
+	* 4096psk — phase-shift keying with 12 bits per symbol
 	* 16qam — quadrature-amplitude modulation with 4 bits per symbol
 	* 32qam — quadrature-amplitude modulation with 5 bits per symbol
 	* 64qam — quadrature-amplitude modulation with 6 bits per symbol
 	* 256qam — quadrature-amplitude modulation with 8 bits per symbol
 	* 1024qam — quadrature-amplitude modulation with 10 bits per symbol
+	* 4096qam — quadrature-amplitude modulation with 12 bits per symbol
 
 * --channel=&lt;channel type&gt; — channel model to use:
 	* awgn — with additive white Gaussian noise

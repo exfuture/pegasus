@@ -178,6 +178,12 @@ void pgm_init_tables()
 #pragma omp section
 #endif
 		{
+			pgm_fill_xsk(pgm_4096psk_table, PGM_4096PSK_VOLUME, PGM_4096PSK_ANGLE_STEP, PGM_4096PSK_PHASE_SHIFT, 1, 0);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
 			pgm_fill_rectangle_qam(pgm_16qam_table, PGM_16QAM_NORMALIZATION, PGM_16QAM_BOUND);
 		}
 #if defined (_OPENMP)
@@ -203,6 +209,12 @@ void pgm_init_tables()
 #endif
 		{
 			pgm_fill_rectangle_qam(pgm_1024qam_table, PGM_1024QAM_NORMALIZATION, PGM_1024QAM_BOUND);
+		}
+#if defined (_OPENMP)
+#pragma omp section
+#endif
+		{
+			pgm_fill_rectangle_qam(pgm_4096qam_table, PGM_4096QAM_NORMALIZATION, PGM_4096QAM_BOUND);
 		}
 	}
 }
@@ -241,6 +253,9 @@ char* pgm_to_string(unsigned int _modulation)
 		case PGM_1024PSK:
 			return PGM_1024PSK_STRING;
 			break;
+		case PGM_4096PSK:
+			return PGM_4096PSK_STRING;
+			break;
 		case PGM_16QAM:
 			return PGM_16QAM_STRING;
 			break;
@@ -255,6 +270,9 @@ char* pgm_to_string(unsigned int _modulation)
 			break;
 		case PGM_1024QAM:
 			return PGM_1024QAM_STRING;
+			break;
+		case PGM_4096QAM:
+			return PGM_4096QAM_STRING;
 			break;
 		default:
 			pgp_switch_default();
@@ -297,6 +315,9 @@ unsigned long long pgm_get_volume(unsigned int _modulation)
 		case PGM_1024PSK:
 			return PGM_1024PSK_VOLUME;
 			break;
+		case PGM_4096PSK:
+			return PGM_4096PSK_VOLUME;
+			break;
 		case PGM_16QAM:
 			return PGM_16QAM_VOLUME;
 			break;
@@ -311,6 +332,9 @@ unsigned long long pgm_get_volume(unsigned int _modulation)
 			break;
 		case PGM_1024QAM:
 			return PGM_1024QAM_VOLUME;
+			break;
+		case PGM_4096QAM:
+			return PGM_4096QAM_VOLUME;
 			break;
 		default:
 			pgp_switch_default();
@@ -353,6 +377,9 @@ unsigned long long pgm_get_block_size(unsigned int _modulation)
 		case PGM_1024PSK:
 			return PGM_1024PSK_BLOCK_SIZE;
 			break;
+		case PGM_4096PSK:
+			return PGM_4096PSK_BLOCK_SIZE;
+			break;
 		case PGM_16QAM:
 			return PGM_16QAM_BLOCK_SIZE;
 			break;
@@ -367,6 +394,9 @@ unsigned long long pgm_get_block_size(unsigned int _modulation)
 			break;
 		case PGM_1024QAM:
 			return PGM_1024QAM_BLOCK_SIZE;
+			break;
+		case PGM_4096QAM:
+			return PGM_4096QAM_BLOCK_SIZE;
 			break;
 		default:
 			pgp_switch_default();
@@ -410,6 +440,9 @@ static void pgm_modulate_block(pgs_signal_t* _signal, pgs_block_t* _block, unsig
 		case PGM_1024PSK:
 			current_signal = &pgm_1024psk_table[pgb_block_to_ull(_block)];
 			break;
+		case PGM_4096PSK:
+			current_signal = &pgm_4096psk_table[pgb_block_to_ull(_block)];
+			break;
 		case PGM_16QAM:
 			current_signal = &pgm_16qam_table[pgb_block_to_ull(_block)];
 			break;
@@ -424,6 +457,9 @@ static void pgm_modulate_block(pgs_signal_t* _signal, pgs_block_t* _block, unsig
 			break;
 		case PGM_1024QAM:
 			current_signal = &pgm_1024qam_table[pgb_block_to_ull(_block)];
+			break;
+		case PGM_4096QAM:
+			current_signal = &pgm_4096qam_table[pgb_block_to_ull(_block)];
 			break;
 		default:
 			pgp_switch_default();
@@ -563,6 +599,14 @@ static void pgm_demodulate_block(pgs_block_t* _demodulated_block, pgs_signal_t* 
 					PGM_1024PSK_VOLUME,
 					PGM_1024PSK_MINIMUM);
 			break;
+		case PGM_4096PSK:
+			pgm_find_block(_demodulated_block,
+					_modulated_signal->i,
+					_modulated_signal->q,
+					pgm_4096psk_table,
+					PGM_4096PSK_VOLUME,
+					PGM_4096PSK_MINIMUM);
+			break;
 		case PGM_16QAM:
 			pgm_find_block(_demodulated_block,
 					_modulated_signal->i,
@@ -602,6 +646,14 @@ static void pgm_demodulate_block(pgs_block_t* _demodulated_block, pgs_signal_t* 
 					pgm_1024qam_table,
 					PGM_1024QAM_VOLUME,
 					PGM_1024QAM_MINIMUM);
+			break;
+		case PGM_4096QAM:
+			pgm_find_block(_demodulated_block,
+					_modulated_signal->i,
+					_modulated_signal->q,
+					pgm_4096qam_table,
+					PGM_4096QAM_VOLUME,
+					PGM_4096QAM_MINIMUM);
 			break;
 		default:
 			pgp_switch_default();
