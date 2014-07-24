@@ -243,11 +243,13 @@ void pgst_run_tests()
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_64PSK), "BER", pgst_modulator_test(PGM_64PSK), 0.0, 0.0);
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_256PSK), "BER", pgst_modulator_test(PGM_256PSK), 0.0, 0.0);
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_1024PSK), "BER", pgst_modulator_test(PGM_1024PSK), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_4096PSK), "BER", pgst_modulator_test(PGM_4096PSK), 0.0, 0.0);
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_16QAM), "BER", pgst_modulator_test(PGM_16QAM), 0.0, 0.0);
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_32QAM), "BER", pgst_modulator_test(PGM_32QAM), 0.0, 0.0);
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_64QAM), "BER", pgst_modulator_test(PGM_64QAM), 0.0, 0.0);
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_256QAM), "BER", pgst_modulator_test(PGM_256QAM), 0.0, 0.0);
 	pgst_show_result_lf("Modulator", pgm_to_string(PGM_1024QAM), "BER", pgst_modulator_test(PGM_1024QAM), 0.0, 0.0);
+	pgst_show_result_lf("Modulator", pgm_to_string(PGM_4096QAM), "BER", pgst_modulator_test(PGM_4096QAM), 0.0, 0.0);
 
 	printf("Tests: %llu, passed: %llu, failed: %llu\n", all_tests_count, passed_tests_count, failed_tests_count);
 }
